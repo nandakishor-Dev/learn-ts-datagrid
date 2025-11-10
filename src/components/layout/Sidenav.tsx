@@ -13,7 +13,7 @@ const drawerWidth = 240;
 export default function SideNav() {
   const location = useLocation();
   const menuItems = [
-    { text: 'GL Accounts', icon: <Home color="secondary" />, path: '/' },
+    { text: 'GL Accounts', icon: <Home color="secondary" />, path: '/gl-accounts' },
     { text: 'Postings', icon: <Search />, path: '/postings' },
   ];
 
