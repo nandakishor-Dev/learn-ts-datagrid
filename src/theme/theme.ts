@@ -13,7 +13,7 @@ const theme = createTheme({
       main: "#7ADAA5",
       light: "#D3FCD2",
       dark: "#118D57",
-      contrastText: "#ffffff",
+      contrastText: "#67AE6E",
     },
     grey: {
       "50": "#FCFDFD",
@@ -27,6 +27,7 @@ const theme = createTheme({
       "800": "#1C252E",
       "900": "#141A21",
     },
+  
   },
   shape: { borderRadius: 8 },
   components: {

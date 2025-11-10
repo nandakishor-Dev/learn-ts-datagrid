@@ -1,11 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { DataGrid, gridClasses } from "@mui/x-data-grid";
 import type { GridColDef } from "@mui/x-data-grid";
-import type { UserValues } from "../../types";
 
-interface Row extends UserValues {
-  id: number;
-}
 export type RowEntry = {
   id: number;
   seqNo: number;
@@ -16,14 +12,12 @@ export type RowEntry = {
   fcAmount: string;
   narrative: string;
 };
-type PvListGridProps={
-    clickRow: (row: RowEntry) => void;
-}
+type PvListGridProps = {
+  clickRow: (row: RowEntry) => void;
+};
 
-const PvListGrid=({clickRow}:PvListGridProps)=> {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [selectedRow, setSelectedRow] = useState<RowEntry | null>(null);
-  const [rows, setRows] = useState<RowEntry[]>([
+const PvListGrid = ({ clickRow }: PvListGridProps) => {
+  const rows: RowEntry[] = [
     {
       id: 1,
       seqNo: 1,
@@ -34,17 +28,10 @@ const PvListGrid=({clickRow}:PvListGridProps)=> {
       fcAmount: "0.00",
       narrative: "Lorem ipsum",
     },
-  ]);
-  const [editingRow, setEditingRow] = useState<Row | null>(null);
-  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
+  ];
 
   const handleClick = (event: React.MouseEvent<HTMLElement>, row: RowEntry) => {
-    //    // eslint-disable-next-line no-debugger
-    //    debugger
-    setAnchorEl(event.currentTarget);
-    setSelectedRow(row);
-    clickRow(row)
+    clickRow(row);
   };
 
   const columns: GridColDef<RowEntry>[] = [
@@ -141,6 +128,6 @@ const PvListGrid=({clickRow}:PvListGridProps)=> {
       />
     </>
   );
-}
+};
 
 export default PvListGrid;

@@ -5,6 +5,7 @@ import Layout from "../components/layout/Layout";
 import PostingRoutes from "./PostingRoutes";
 import GLAccountsRoutes from "./GLAccountsRoutes";
 import CategoryAccountLink from "../pages/Dashboard/glAccounts/CategoryAccountLink";
+import Home from "../pages/Dashboard/home/Home";
 
 const PaymentVoucherPostingCreate = React.lazy(
   () =>
@@ -17,7 +18,8 @@ const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
-        <Route index element={<Navigate to="/gl-accounts" replace />} />
+        <Route index element={<Navigate to="/dashboard" replace />} />
+        <Route index path="dashboard" element={<Home />}></Route>
         {/* Posting routes */}
         <Route path="postings" element={<PostingRoutes />}>
           <Route index element={<PaymentVoucherPosting />} />

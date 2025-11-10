@@ -4,17 +4,22 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-} from '@mui/material';
-import { Link, useLocation } from 'react-router-dom';
-import { Home, Search } from '@mui/icons-material';
+} from "@mui/material";
+import { Link, useLocation } from "react-router-dom";
+import { Home, Search } from "@mui/icons-material";
 
 const drawerWidth = 240;
 
 export default function SideNav() {
   const location = useLocation();
   const menuItems = [
-    { text: 'GL Accounts', icon: <Home color="secondary" />, path: '/gl-accounts' },
-    { text: 'Postings', icon: <Search />, path: '/postings' },
+    { text: "Dashboard", icon: <Home color="secondary" />, path: "/dashboard" },
+    {
+      text: "GL Accounts",
+      icon: <Search color="secondary" />,
+      path: "/gl-accounts",
+    },
+    { text: "Postings", icon: <Search />, path: "/postings" },
   ];
 
   return (
@@ -22,7 +27,7 @@ export default function SideNav() {
       variant="permanent"
       sx={{
         width: drawerWidth,
-        [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' },
+        [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: "border-box" },
       }}
     >
       <List>
