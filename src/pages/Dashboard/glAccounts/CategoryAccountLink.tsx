@@ -171,8 +171,9 @@ const CategoryAccountLink = () => {
   };
   const onAccordionChange =
     (panel: string) => (_: React.SyntheticEvent, isExpanded: boolean) => {
+      
       setExpanded(isExpanded ? panel : false);
-      if (isExpanded) handleSelectCategory(panel);
+    //   if (isExpanded) handleSelectCategory(panel);
     };
   useEffect(() => {
     if (selectedCategoryId) {
@@ -402,7 +403,6 @@ const CategoryAccountLink = () => {
                         >
                           <Box display="flex" alignItems="center" gap={1}>
                             <FormControlLabel
-                              sx={{ pointerEvents: "none" }}
                               onClick={(e) => e.stopPropagation()}
                               onFocus={(e) => e.stopPropagation()}
                               onMouseDown={(e) => e.stopPropagation()}
@@ -443,7 +443,6 @@ const CategoryAccountLink = () => {
                                         `selectedCategorized.${item.id}` as const
                                       }
                                       control={control}
-                                      defaultValue={false}
                                       render={({ field }) => (
                                         <Checkbox
                                           size="small"
