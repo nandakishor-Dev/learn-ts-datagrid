@@ -50,13 +50,13 @@ type FormValues = z.infer<typeof FormSchema>;
 
 // data
 const initialAvailable: Item[] = [
-  { id: "1p", label: "Messi" },
-  { id: "2p", label: "Ronaldo" },
-  { id: "3p", label: "Depaul" },
-  { id: "4p", label: "Neymar" },
-  { id: "5p", label: "Silva" },
-  { id: "6p", label: "Marquinhos" },
-  { id: "7p", label: "Martinez" },
+  { id: "1p", label: "Depaul" },
+  { id: "2p", label: "Martinez" },
+  { id: "3p", label: "Marquinhos" },
+  { id: "4p", label: "Messi" },
+  { id: "5p", label: "Neymar" },
+  { id: "6p", label: "Ronaldo" },
+  { id: "7p", label: "Silva" },
 ];
 
 const initialCategories: Category[] = [
@@ -99,21 +99,30 @@ const CategoryAccountLink = () => {
       setValue("selectedCategoryId", catId);
     }
   };
-  const selectedAvailableIds = useMemo(
-    () =>
-      Object.entries(selectedAvailableMap)
-        .filter(([, v]) => v)
-        .map(([k]) => k),
-    [selectedAvailableMap]
-  );
-  //   console.log("selectedCategoryId", selectedCategoryId);
-  const selectedCategorizedIds = useMemo(
-    () =>
-      Object.entries(selectedCategorizedMap)
-        .filter(([, v]) => v)
-        .map(([k]) => k),
-    [selectedCategorizedMap]
-  );
+  const selectedAvailableIds = useMemo(() => {
+    const ids: string[] = [];
+
+    for (const id in selectedAvailableMap) {
+      const isSelected = selectedAvailableMap[id];
+      if (isSelected) {
+        ids.push(id);
+      }
+    }
+
+    return ids;
+  }, [selectedAvailableMap]);
+  const selectedCategorizedIds = useMemo(() => {
+    const ids: string[] = [];
+
+    for (const id in selectedCategorizedMap) {
+      const isSelected = selectedCategorizedMap[id];
+      if (isSelected) {
+        ids.push(id);
+      }
+    }
+
+    return ids;
+  }, [selectedCategorizedMap]);
   const canLink = selectedAvailableIds.length > 0 && !!selectedCategoryId;
   const canUnlink = selectedCategorizedIds.length > 0;
   const handleLink = () => {
@@ -145,21 +154,21 @@ const CategoryAccountLink = () => {
     if (!canUnlink) return;
 
     const itemsToMove: Item[] = [];
-    const nextCategories = categories.map((c) => {
-      const [keep, move] = c.items.reduce(
-        (acc, item) => {
-          if (selectedCategorizedIds.includes(item.id)) {
-            acc[1].push(item);
-          } else {
-            acc[0].push(item);
-          }
-          return acc;
-        },
-        [[], []] as [Item[], Item[]]
-      );
+
+    const nextCategories = categories.map((category) => {
+      const keep: Item[] = [];
+      const move: Item[] = [];
+
+      for (const item of category.items) {
+        (selectedCategorizedIds.includes(item.id) ? move : keep).push(item);
+      }
+
       itemsToMove.push(...move);
-      return { ...c, items: keep };
+
+      return { ...category, items: keep };
     });
+
+    // debugger
 
     setCategories(nextCategories);
     setAvailable((prev) =>
@@ -171,9 +180,8 @@ const CategoryAccountLink = () => {
   };
   const onAccordionChange =
     (panel: string) => (_: React.SyntheticEvent, isExpanded: boolean) => {
-      
       setExpanded(isExpanded ? panel : false);
-    //   if (isExpanded) handleSelectCategory(panel);
+      //   if (isExpanded) handleSelectCategory(panel);
     };
   useEffect(() => {
     if (selectedCategoryId) {
@@ -275,14 +283,23 @@ const CategoryAccountLink = () => {
         {/* Form Section */}
         <Box sx={{ pl: 2 }} component={"form"}>
           <Stack spacing={2}>
-            <Box sx={{ height: "40px", bgcolor: "grey.200" }}>
+            <Box
+              sx={{
+                height: "40px",
+                bgcolor: "grey.200",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                pl: 1,
+              }}
+            >
               <Grid container>
-                <Grid size={{ xs: 5 }}>
-                  <Typography>GL Accounts</Typography>
+                <Grid size={{ xs: 4 }}>
+                  <Typography fontWeight={600}>GL Accounts</Typography>
                 </Grid>
-                <Grid size={{ xs: 2 }}></Grid>
-                <Grid size={{ xs: 5 }}>
-                  <Typography>Categories</Typography>
+                <Grid size={{ xs: 4 }}></Grid>
+                <Grid size={{ xs: 4 }}>
+                  <Typography fontWeight={600}>Categories</Typography>
                 </Grid>
               </Grid>
             </Box>
@@ -303,11 +320,11 @@ const CategoryAccountLink = () => {
                   fullWidth
                 />
               </Grid>
-              <Grid size={{ xs: 3 }}></Grid>
-              <Grid size={{ xs: 5 }}>
+              <Grid size={{ xs: 4 }}></Grid>
+              <Grid size={{ xs: 4 }} pl={2}>
                 <TextField
                   size="small"
-                  placeholder="Search Categories,GL Account"
+                  placeholder="Search Categories"
                   slotProps={{
                     input: {
                       startAdornment: (
@@ -321,7 +338,7 @@ const CategoryAccountLink = () => {
                 />
               </Grid>
             </Grid>
-
+            {/* Table data section */}
             <Box>
               <Grid container spacing={2}>
                 <Grid size={{ xs: 4 }}>
@@ -351,20 +368,21 @@ const CategoryAccountLink = () => {
                               />
                             )}
                           />
-                          <ListItemText primary={item.label} />
+                          <ListItemText primary={item.label} sx={{ ml: 2 }} />
                         </ListItem>
                       </Box>
                     ))}
                   </List>
                 </Grid>
                 {/* link/unlink column */}
-                <Grid size={{ xs: 3 }}>
+                <Grid size={{ xs: 4 }}>
                   <Box
                     display={"flex"}
                     flexDirection={"column"}
                     justifyContent={"center"}
                     gap={2}
                     sx={{ height: "270px" }}
+                    p={5}
                   >
                     <Button
                       sx={{ bgcolor: "success.dark" }}
@@ -387,7 +405,7 @@ const CategoryAccountLink = () => {
                   </Box>
                 </Grid>
                 {/* category column */}
-                <Grid size={{ xs: 5 }}>
+                <Grid size={{ xs: 4 }}>
                   {categories.map((cat) => {
                     const isSelected = selectedCategoryId === cat.id;
                     const count = cat.items.length;
@@ -415,12 +433,14 @@ const CategoryAccountLink = () => {
                                     "&.Mui-checked": {
                                       color: "success.main",
                                     },
+                                    ml: 2,
                                   }}
                                   checked={isSelected}
                                   onChange={() => handleSelectCategory(cat.id)}
                                 />
                               }
                               label={cat.label}
+                              sx={{ "& .MuiFormControlLabel-label": { ml: 2 } }}
                             />
                             {/* <Chip size="small" label={count} /> */}
                           </Box>
@@ -433,7 +453,7 @@ const CategoryAccountLink = () => {
                           ) : (
                             <List
                               dense
-                              sx={{ maxHeight: 260, overflow: "auto" }}
+                              sx={{ maxHeight: 260, overflow: "auto",ml: 2  }}
                             >
                               {cat.items.map((item) => (
                                 <ListItem key={item.id} disablePadding>
@@ -465,6 +485,7 @@ const CategoryAccountLink = () => {
                                   <ListItemText
                                     color="success.main"
                                     primary={item.label}
+                                    sx={{ml:2}}
                                   />
                                 </ListItem>
                               ))}
